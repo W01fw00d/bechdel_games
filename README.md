@@ -9,3 +9,7 @@ Based on [this tutorial](https://www.dappuniversity.com/articles/how-to-build-a-
 ```
 npm install
 ```
+
+```
+npm run start
+```
