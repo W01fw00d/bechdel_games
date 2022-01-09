@@ -6,6 +6,8 @@ import Navbar from "./Navbar";
 import logo from "../logo.png";
 import "./App.css";
 
+import Marketplace from "../abis/Marketplace.json";
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -32,9 +34,20 @@ class App extends Component {
 
   async loadBlockchainData() {
     const web3 = window.web3;
+    // Load account
     const accounts = await web3.eth.getAccounts();
-    console.log(accounts);
     this.setState({ account: accounts[0] });
+    const networkId = await web3.eth.net.getId();
+    const networkData = Marketplace.networks[networkId];
+    if (networkData) {
+      const marketplace = web3.eth.Contract(
+        Marketplace.abi,
+        networkData.address
+      );
+      console.log(marketplace);
+    } else {
+      window.alert("Marketplace contract not deployed to detected network.");
+    }
   }
 
   async componentWillMount() {
