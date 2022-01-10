@@ -20,6 +20,16 @@ class App extends Component {
       });
   }
 
+  purchaseProduct(id, price) {
+    this.setState({ loading: true });
+    this.state.marketplace.methods
+      .purchaseProduct(id)
+      .send({ from: this.state.account, value: price })
+      .once("receipt", (receipt) => {
+        this.setState({ loading: false });
+      });
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,6 +39,7 @@ class App extends Component {
       loading: true,
     };
     this.createProduct = this.createProduct.bind(this);
+    this.purchaseProduct = this.purchaseProduct.bind(this);
   }
 
   async loadWeb3() {
@@ -58,6 +69,14 @@ class App extends Component {
       );
       this.setState({ marketplace });
       const productCount = await marketplace.methods.productCount().call();
+      this.setState({ productCount });
+      // Load products
+      for (var i = 1; i <= productCount; i++) {
+        const product = await marketplace.methods.products(i).call();
+        this.setState({
+          products: [...this.state.products, product],
+        });
+      }
       console.log(productCount.toString());
       this.setState({ loading: false });
     } else {
@@ -82,7 +101,11 @@ class App extends Component {
                   <p className="text-center">Loading...</p>
                 </div>
               ) : (
-                <Main createProduct={this.createProduct} />
+                <Main
+                  products={this.state.products}
+                  createProduct={this.createProduct}
+                  purchaseProduct={this.purchaseProduct}
+                />
               )}
             </main>
           </div>
