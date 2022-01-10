@@ -13,3 +13,35 @@ npm install
 ```
 npm run start
 ```
+
+### Truffle commands
+
+Compile contracts/ into abis/
+
+```
+truffle compile
+```
+
+Apply migrations/ to blockchain
+
+```
+truffle migrate
+```
+
+Apply migrations/ again to the blockchain as new copy of the smart contracts
+
+```
+truffle migrate --reset
+```
+
+Open console
+
+```
+truffle console
+```
+
+Run all tests
+
+```
+truffle test
+```
